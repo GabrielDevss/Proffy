@@ -1,34 +1,56 @@
 import React from 'react';
-
+import api from '../../services/api';
 import whatsappIcon from '../../assets/images/icons/whatsapp.svg';
 
 import './styles.css';
 
-function TeacherItem() {
+ export interface Teacher {
+  
+    id: number;
+    name: string;
+    avatar: string;
+    bio: string;
+    cost: number;
+    subject: string;
+    whasapp: string;
+}
+
+interface TeacherItemProps {
+  teacher: Teacher;
+}
+
+ const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) =>  {
+  
+  function createNewConnection() {
+    api.post('connections', {
+      user_id: teacher.id
+    })
+  }
+
+
   return (
     <article className="teacher-item">
     <header>
-      <img src="https://scontent-gru2-1.xx.fbcdn.net/v/t1.0-9/49147257_1580422462101463_8837051217617092608_o.jpg?_nc_cat=107&_nc_sid=8bfeb9&_nc_eui2=AeHMwbYVBn4VP3pMl7YSy7_0-p1mcI5aKPL6nWZwjloo8m7NqOlxBzJNl3N_7CXkshMG9so87idKVfKmfFKnqe_7&_nc_ohc=gNNlFkQ-5p8AX99n7td&_nc_ht=scontent-gru2-1.xx&oh=a9f1c1606d623022fa1bc60957ee002b&oe=5F51A819" alt="Gabriel Oliveira"/>
+      <img src={teacher.whasapp} alt={teacher.name}/>
         <div>
-          <strong>Gabriel Oliveira</strong>
-          <span>Inglês</span>
+          <strong>{teacher.name}</strong>
+          <span>{teacher.subject}</span>
         </div>
     </header>
     <p>
-      Amante de lingua inglêsa já ensinou mais de 2 mil<br />
-      pessoas a falar fluênte como um nativo.
+      {teacher.bio}
       <br/> <br/>
     </p>
 
     <footer>
       <p>
         Preço/hora
-        <strong>R$ 80,00</strong>
+        <strong>R$ {teacher.cost}</strong>
       </p>
-      <button type="button">
+      <a target="blank" onClick={createNewConnection} href={`https://wa.me/${teacher.whasapp} `}>
         <img src={whatsappIcon} alt="whatsapp"/>
         Entrar em contato.
-      </button>
+      </a>
     </footer>
   </article>
   );
